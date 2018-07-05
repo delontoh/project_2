@@ -75,7 +75,7 @@ const getExpense = (request, response) => {
 
 
 const newExpense = (request, response) => {// render form with 5 inputs in views. Inputs are only Item and Amount.
-	response.render('./newExpense');
+	response.render('./newexpense');
 }
 
 const postExpense = (request, response) => {
