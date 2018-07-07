@@ -1,6 +1,6 @@
 var React = require('react');
 
-class LayoutContainer extends React.Component {
+class loginLayout extends React.Component {
 	render() {
 		return(
 			<html>
@@ -16,4 +16,4 @@ class LayoutContainer extends React.Component {
 	}
 }
 
-module.exports = LayoutContainer;
+module.exports = loginLayout;
