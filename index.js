@@ -6,13 +6,12 @@
 
 // Require necessary modules
 
+const SALT = 'delon is awesome';
 const express = require('express');
 const methodOverride = require('method-override');
 const pg = require('pg');
 const sha256 = require('js-sha256');
 const cookieParser = require('cookie-parser');
-
-const SALT = 'delon is awesome';
 
 // Initialise Postgres client
 
@@ -49,19 +48,34 @@ app.engine('jsx', reactEngine);
  * ===================================
  */
 
+dateObj = {
+	1: '"2018-01-01" AND "2018-01-31";',
+	2: '"2018-02-01" AND "2018-02-31";',
+	3: '"2018-03-01" AND "2018-03-31";',
+	4: '"2018-04-01" AND "2018-04-31";',
+	5: '"2018-05-01" AND "2018-05-31";',
+	6: '"2018-06-01" AND "2018-06-31";',
+	7: '"2018-07-01" AND "2018-07-31";',
+	8: '"2018-08-01" AND "2018-08-31";',
+	9: '"2018-09-01" AND "2018-09-31";',
+	10: '"2018-10-01" AND "2018-10-31";',
+	11: '"2018-11-01" AND "2018-11-31";',
+	12: '"2018-12-01" AND "2018-12-31";'
+}
+
 
 /**
  * === Expense Handlers === *
  */
 
 const getExpense = (request, response) => {
-	let somedate;
+	let monthId = request.params['month'];
 
 	let userId = parseInt(request.cookies['user_id']);	
 
-	let queryString = 'SELECT exp_date, exp_item, exp_amt FROM expense WHERE EXTRACT(MONTH FROM ''exp_date'') = $1 AND EXTRACT(YEAR FROM ''exp_date'') = $2 AND user_id = $3;'
+	let queryString = 'SELECT exp_date, exp_item, exp_amt FROM expense WHERE user_id = $1 AND budget_date BETWEEN ' + dateObj.monthId;
 
-	let values = [somedate.month, somedate.year, userId];
+	let values = [userId, monthId];
 
 	pool.query(queryString, values, (err, result) => {
 		if(err) {
@@ -159,24 +173,42 @@ const deleteExpense = (request, response) => {
  * === Total Expense Handler === *
  */
 
-const getExpenseTotal = (request, response) => {
-	let somedate;
 
-	let userId = parseInt(request.cookies['user_id']);
+// const getReport = async (request, response) => {
+// 	let monthId = 7; /*request.params['month'];*/
 
-	let queryString = 'SELECT COALESCE( SUM(exp_amt), 0) AS exp_total FROM expense WHERE EXTRACT(month FROM ''exp_date'') = $1 AND EXTRACT(year FROM ''exp_date'') = $2 AND user_id = $3;';
+// 	let userId = 1;//parseInt(request.cookies['user_id']);
 
-	let values = [somedate.month, somedate.year, userId];
+// 	let queryExpenseTotal = 'SELECT COALESCE( SUM(exp_amt), 0) AS exp_total FROM expense WHERE user_id = 1 AND exp_date BETWEEN ' + dateObj['7'];
 
-	pool.query(queryString, values, (err, result) => {
-		if(err) {
-			response.send('Query error: ', err.message);
-		}
-		else {
-			response.render('./totalexpense', {total: result.rows[0]});
-		};
-	});
-};
+// 	let queryBudget = 'SELECT COALESCE(budget_amt, 0) FROM budget WHERE user_id = $1 AND budget_date BETWEEN ' + dateObj['7'];
+
+// 	let values = [monthId, userId];
+
+// 	let resultArray = [];
+
+// 	let errorArray = [];
+// 		/*let budgetReport = await pool.query(queryBudget, values);
+// 		resultArray.push(budgetReport);*/	
+
+// 	try {
+// 		let expenseReport = await pool.query(queryExpenseTotal, values);
+// 		console.log(expenseReport);
+// 		resultArray.push(expenseReport);
+// 		console.log(resultArray);
+
+// 	} catch(err1) {
+// 		errorArray.push(err1);
+// 	};
+
+// 	if(errorArray.length === 0) {
+// 		console.log('query success!');
+// 		console.log(resultArray);
+// 	};
+// };
+
+// getReport();
+
 
 
 /**
@@ -185,13 +217,9 @@ const getExpenseTotal = (request, response) => {
 
 const getBudget = (request, response) => {		// GET budget from db if Budget exist. This view will have an 'Edit' button.
 	let somedate;
-
 	let userId = parseInt(request.cookies['user_id']);
-
 	let queryString = 'SELECT COALESCE(budget_amt, 0) FROM budget WHERE EXTRACT(MONTH FROM ''budget_date'') = $1 AND EXTRACT(year FROM ''budget_date'') = $2 AND user_id = $3;'
-
 	let values = [something.month, something.year, userId];
-
 	pool.query(queryString, values, (err, result) => {
 		if(err) {
 			response.send('Query error: ', err.message);
@@ -293,7 +321,7 @@ const createUser = (request, response) => {
 
 			response.cookie('logged_in', currentSessionCookie);
 			response.cookie('user_id', userId);
-			response.redirect('/user/home');
+			response.redirect('/user/calendar');
 		};
 	});
 };
@@ -324,6 +352,8 @@ const verifyUser = (request, response) => {
 					let currentSessionCookie = sha256(userId + 'logged_in' + SALT);
 					response.cookie('logged_in', currentSessionCookie);
 					response.cookie('user_id', userId);
+
+					response.redirect('/user/calendar');	// redirect to calendar's page.
 				}
 				else {
 					response.status(401);
@@ -341,6 +371,12 @@ const logoutPage = (request, response) => {
 	response.send('You are safely logged out');
 };
 
+// * Calendar page handler
+
+const getCalendar = (request, response) => {
+	response.render('/calendar');
+};
+
 
 /**
  * ===================================
@@ -350,28 +386,28 @@ const logoutPage = (request, response) => {
 
 // ** Expense routes **
 
-app.get('/user/totalexpense', getExpenseTotal);
+app.get('/user/totalexpense/:month', getExpenseTotal);
 
-app.get('/user/expense', getExpense);
+app.get('/user/expense/:month', getExpense);
 
 app.get('/user/expense/new', newExpense);
 app.post('/user/expense/post', postExpense);
 
-app.get('/user/expense/edit', editExpense);
+app.get('/user/expense/edit/:month', editExpense);
 app.post('/user/expense/put', putExpense);
 
-app.delete('/user/expense/delete', deleteExpense);
+app.delete('/user/expense/delete/:month', deleteExpense);
 
 
 
 // ** Budget routes **
 
-app.get('/user/budget', getBudget);
+app.get('/user/budget/:month', getBudget);
 
 app.get('/user/budget/new', newBudget);
 app.post('/user/budget/post', postBudget);
 
-app.get('/user/budget/edit', editBudget);
+app.get('/user/budget/edit/:month', editBudget);
 app.put('/user/budget/put', putBudget);
 
 
@@ -384,6 +420,11 @@ app.post('/user/login', verifyUser);
 app.post('/user/new', createUser);
 
 app.delete('/user/logout', logoutPage);
+
+
+// * Calendar route **
+
+app.get('/user/calendar', getCalendar);
 
 
  /**
