@@ -7,7 +7,7 @@ class editexpense extends React.Component {
       <ExpenseLayout>
         <div className= 'editExpenseContainer'>
           <h1>Edit Expense</h1><br/><br/>
-          <form className="expense-form" method="POST" action={"/user/expense/edit" + "?_method=PUT"}>
+          <form className="expense-form" method="POST" action={"/user/expense/put?_method=PUT"}>
              <div className="expense-attribute">
               Date: <input name="exp_item" type="text" defaultValue={this.props.editExpense.exp_date} />
             </div>
@@ -19,7 +19,7 @@ class editexpense extends React.Component {
             </div>
 
             <input name="edit" type="submit" value= 'Save' />
-            <input name="delete" type="submit" value='Delete' formAction={"user/expense/delete" + "?_method=DELETE"} />
+            <input name="delete" type="submit" value='Delete' formAction={"user/expense/delete?_method=DELETE"} />
           </form>
         </div>
       </ExpenseLayout>

@@ -1,0 +1,42 @@
+body {
+	text-align: center;
+	background-color: rgb(78, 81, 78);
+	background-size: cover;
+}
+
+h1 {
+	color: rgb(249, 177, 19);
+	font-family: 'Wendy One', sans-serif;
+	font-size: 80px;
+	text-align: center;
+	margin-top: 10%;
+}
+
+h3 {
+	color: white;
+	font-size: 20px;
+}
+
+input[type=text] {
+	background-color: rgb(60, 188, 141);
+	color: white;
+	border-radius: 3px;
+	border-color: rgb(60, 188, 141);
+}
+
+input[type=password] {
+	background-color: rgb(60, 188, 141);
+	color: white;
+	border-radius: 2px;
+	border-color: rgb(60, 188, 141);
+
+}
+
+.submit {
+	display: inline;
+	margin: 0 8px;
+	color: white;
+	background-color: rgb(249, 177, 19);
+	border-color: rgb(249, 177, 19);
+	border-radius: 3px;
+}

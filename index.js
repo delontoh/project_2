@@ -35,6 +35,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 
+// Use files in public folder
+app.use(express.static(__dirname + '/public'));
+
 // Set react-views to be default view engine
 const reactEngine = require('express-react-views').createEngine();
 app.set('views', __dirname + '/views');
@@ -48,47 +51,48 @@ app.engine('jsx', reactEngine);
  * ===================================
  */
 
-var dateObj = {
+const dateObj = {
 	1: "'2018-01-01' AND '2018-01-31';",
-	2: "'2018-02-01' AND '2018-02-31';",
+	2: "'2018-02-01' AND '2018-02-28';",
 	3: "'2018-03-01' AND '2018-03-31';",
-	4: "'2018-04-01' AND '2018-04-31';",
+	4: "'2018-04-01' AND '2018-04-30';",
 	5: "'2018-05-01' AND '2018-05-31';",
-	6: "'2018-06-01' AND '2018-06-31';",
+	6: "'2018-06-01' AND '2018-06-30';",
 	7: "'2018-07-01' AND '2018-07-31';",
 	8: "'2018-08-01' AND '2018-08-31';",
-	9: "'2018-09-01' AND '2018-09-31';",
+	9: "'2018-09-01' AND '2018-09-30';",
 	10: "'2018-10-01' AND '2018-10-31';",
-	11: "'2018-11-01' AND '2018-11-31';",
-	12: "'2018-12-01' AND '2018-12-31';"
+	11: "'2018-11-01' AND '2018-11-30';",
+	12: "'2018-12-01' AND '2018-12-30';"
 };
 
 /**
  * === Expense Handlers === *
  */
 
-const getExpense = (request, response) => {
-	let month = request.params['month'];
+// const getExpense = (request, response) => {
 
-	let userId = parseInt(request.cookies['user_id']);	
+// 	let monthId = parseInt(request.params['month']);
 
-	let queryString = "SELECT exp_date, exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj['month']; 
+// 	let userId = parseInt(request.cookies['user_id']);
 
-	let values = [userId];
+// 	let queryString = "SELECT exp_date, EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId]; 
 
-	pool.query(queryString, (err, result) => {
-		if(err) {
-			console.error('Query error: ', err.message);
-			response.sendStatus(500);
-		}
-		else {
-			response.render('./expenselist', {getExpense: result.rows}); // render with Expense view
-		};
-	});
-};
+// 	let values = [userId];
+
+// 	pool.query(queryString, values, (err, result) => {
+// 		if(err) {
+// 			console.error('Query error: ', err.message);
+// 			response.sendStatus(500);
+// 		}
+// 		else {
+// 			response.render('./expenselist', {getExpense: result.rows}); // render with Expense view
+// 		};
+// 	});
+// };
 
 
-// const newExpense = (request, response) => {// render form with 5 inputs in views. Inputs are only Item and Amount.
+// const newExpense = (request, response) => {
 // 	response.render('./newexpense');
 // }
 
@@ -107,17 +111,17 @@ const getExpense = (request, response) => {
 // 			response.sendStatus(500);
 // 		}
 // 		else {
-// 			response.redirect('/user/expense');		// redirect to getExpense route.
+// 			response.redirect('/calendar');		// redirect to calendar page.
 // 		};
 // 	});
 // };
 
 // const editExpense = (request, response) => {	// render Edit form for Expense base on date and userId 
-// 	let month = request.params['month'];
+// 	let monthId = parseInt(request.params['month']);
 
 // 	let userId = parseInt(request.cookies['user_id']);
 
-// 	let queryString = "SELECT exp_date, exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj['month'];
+// 	let queryString = "SELECT exp_date, EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId];
 
 // 	let values = [userId];
 
@@ -147,7 +151,7 @@ const getExpense = (request, response) => {
 // 			response.sendStatus(500);
 // 		}
 // 		else {
-// 			response.redirect('user/expense');	// redirect to getExpense route
+// 			response.redirect('/calendar');	// redirect to calendar page
 // 		};
 // 	});
 // };
@@ -167,137 +171,10 @@ const getExpense = (request, response) => {
 // 			response.sendStatus(500);
 // 		}
 // 		else {
-// 			response.redirect('/user/expense'); // redirect to getExpense route
+// 			response.redirect('/calendar'); // redirect to calendar page
 // 		};
 // 	});
 // };
-
-
-/**
- * === Total Expense Handler === *
- */
-
-
-// const getReport = async (request, response) => {
-// 	let monthId = 7; /*request.params['month'];*/
-
-// 	let userId = 1;//parseInt(request.cookies['user_id']);
-
-// 	let queryExpenseTotal = 'SELECT COALESCE( SUM(exp_amt), 0) AS exp_total FROM expense WHERE user_id = 1 AND exp_date BETWEEN ' + dateObj['7'];
-
-// 	let queryBudget = 'SELECT COALESCE(budget_amt, 0) FROM budget WHERE user_id = $1 AND budget_date BETWEEN ' + dateObj['7'];
-
-// 	let values = [monthId, userId];
-
-// 	let resultArray = [];
-
-// 	let errorArray = [];
-// 		/*let budgetReport = await pool.query(queryBudget, values);
-// 		resultArray.push(budgetReport);*/	
-
-// 	try {
-// 		let expenseReport = await pool.query(queryExpenseTotal, values);
-// 		console.log(expenseReport);
-// 		resultArray.push(expenseReport);
-// 		console.log(resultArray);
-
-// 	} catch(err1) {
-// 		errorArray.push(err1);
-// 	};
-
-// 	if(errorArray.length === 0) {
-// 		console.log('query success!');
-// 		console.log(resultArray);
-// 	};
-// };
-
-// getReport();
-
-
-
-/**
- * === Budget Handlers === *
- */
-
-// const getBudget = (request, response) => {		// GET budget from db if Budget exist. This view will have an 'Edit' button.
-// 	let somedate;
-// 	let userId = parseInt(request.cookies['user_id']);
-// 	let queryString = 'SELECT COALESCE(budget_amt, 0) FROM budget WHERE EXTRACT(MONTH FROM ''budget_date'') = $1 AND EXTRACT(year FROM ''budget_date'') = $2 AND user_id = $3;'
-// 	let values = [something.month, something.year, userId];
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			response.send('Query error: ', err.message);
-// 		}
-// 		else {
-// 			response.render('./budget', {getBudget: result.rows[0]});	// return result as OBJECT KEY-- budget
-// 		};
-// 	});
-// };
-
-
-// const newBudget = (request, response) => {		// GET budget form if Budget not yet created. This will have a New Budget view with 'save' button.
-// 	response.render('./newbudget');  
-// };
-
-
-// const postBudget = (request, response) => {		// once 'save' is clicked and submitted, redirect to getBudget route.
-// 	let body = request.body;
-
-// 	let userId = parseInt(request.cookies['user_id']);
-
-// 	let queryString = 'INSERT INTO budget(budget_amt, user_id) VALUES ($1, $2) RETURNING *;';
-
-// 	let values = [body['budget_amt'], userId];
-
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			response.send('Query error: ', err.message);
-// 		}
-// 		else {
-// 			response.redirect('/user/budget')  // once 'save' is clicked and submitted, redirect to getBudget route.
-// 		};
-// 	});
-// };	
-
-
-// const editBudget = (request, response) => {		// render Edit form view once 'Edit' button is clicked.
-// 	let somedate;
-
-// 	let userId = parseInt(request.cookies['user_id']);
-
-// 	let queryString = 'SELECT budget_amt FROM budget WHERE EXTRACT(MONTH FROM ''budget_date'') = $1 AND EXTRACT(YEAR FROM ''budget_date'') = $2 AND user_id = $3;'
-
-// 	let values = [somedate.month, somedate.year, userId];
-
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			response.send('Query error: ', err.message);
-// 		}
-// 		else {
-// 			response.render('./editbudget', {editBudget: result.rows[0]});	
-// 		};
-// 	});
-// };
-
-// const putBudget = (request, response) => {		// update budget_amt base on date and user_id selected in edit form above.
-// 	let body = request.body;
-
-// 	let userId = parseInt(request.cookies['user_id']);
-
-// 	let queryString = 'UPDATE budget SET budget_amt = $1 WHERE user_id = $2;';
-
-// 	let values = [body['budget_amt', userId]];
-
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			console.error('Query error: ', err.message);
-// 		}
-// 		else {
-// 			response.redirect('/user/budget'); // once 'save' is clicked and submitted, redirect to getBudget route.
-// 		};
-// 	});
-// };
-
 
 
 /**
@@ -325,7 +202,7 @@ const createUser = (request, response) => {
 
 			response.cookie('logged_in', currentSessionCookie);
 			response.cookie('user_id', userId);
-			response.redirect('/user/calendar');
+			response.redirect('/calendar');
 		};
 	});
 };
@@ -357,7 +234,7 @@ const verifyUser = (request, response) => {
 					response.cookie('logged_in', currentSessionCookie);
 					response.cookie('user_id', userId);
 
-					response.redirect('/user/calendar');	// redirect to calendar's page.
+					response.redirect('/calendar');	// redirect to calendar's page.
 				}
 				else {
 					response.status(401);
@@ -392,28 +269,15 @@ const getCalendar = (request, response) => {
 
 // app.get('/user/totalexpense/:month', getExpenseTotal);
 
-app.get('/user/expense/:month', getExpense);
+// app.get('/user/expense/:month', getExpense);
 
-// app.get('/user/expense/new', newExpense);
+// app.get('/user/expense/:month/new', newExpense);
 // app.post('/user/expense/post', postExpense);
 
-// app.get('/user/expense/edit/:month', editExpense);
+// app.get('/user/expense/:month/edit', editExpense);
 // app.post('/user/expense/put', putExpense);
 
-// app.delete('/user/expense/delete/:month', deleteExpense);
-
-
-
-// ** Budget routes **
-
-// app.get('/user/budget/:month', getBudget);
-
-// app.get('/user/budget/new', newBudget);
-// app.post('/user/budget/post', postBudget);
-
-// app.get('/user/budget/edit/:month', editBudget);
-// app.put('/user/budget/put', putBudget);
-
+// app.delete('/user/expense/delete', deleteExpense);
 
 
 // ** User routes **
@@ -428,7 +292,7 @@ app.delete('/user/logout', logoutPage);
 
 // * Calendar route **
 
-app.get('/user/calendar', getCalendar);
+app.get('/calendar', getCalendar);
 
 
  /**

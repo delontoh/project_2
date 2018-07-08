@@ -5,15 +5,16 @@ class CalendarLayout extends React.Component {
 		return(
 			<html>
 				<head>
+					<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossOrigin="anonymous"/>
 					<link href="https://fonts.googleapis.com/css?family=Wendy+One" rel="stylesheet" />
-					<link rel="stylesheet" type="text/css" href="./css/expense.css" />
+					<link rel="stylesheet" type="text/css" href="/calendar.css" />
 				</head>
 				<body>
 					{this.props.children}
 				</body>
 			</html>
-		)
-	}
-}
+		);
+	};
+};
 
 module.exports = CalendarLayout;

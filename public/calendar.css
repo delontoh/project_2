@@ -1,0 +1,31 @@
+body {
+	text-align: center;
+	background-color: rgb(78, 81, 78);
+	background-size: cover;
+}
+
+.container-fluid {
+	text-align: center;
+}
+
+h1 {
+	color: rgb(249, 177, 19);
+	font-family: 'Wendy One', sans-serif;
+	text-align: center;
+	margin-top: 10%;
+}
+
+.actionButtonContainer {
+	text-align: center;
+
+}
+
+input {
+	background-color: rgb(249, 177, 19);
+}
+
+.btn {
+	color: white;
+	border-color: white;
+	border-width: 3px;
+}
