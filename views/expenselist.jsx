@@ -29,14 +29,14 @@ class ListDetails extends React.Component {
          </div>
         </div>
 
-        <ul>
+{/*        <ul>
           <li className= 'list-title'>
             |Date|
             |Item|
             |Amount|
           </li>
-        </ul>
-
+        </ul>*/}
+{/*
         <ul>
           {this.props.getExpense.map( function(currentexpense) {
             return (
@@ -47,7 +47,34 @@ class ListDetails extends React.Component {
                 </li>
               )
           })}
-        </ul> 
+        </ul>*/} 
+
+        <table className= 'table table-hover table-striped table-dark'>
+          <thead>
+            <tr>
+              <th scope='col'>Date</th>
+              <th scope='col'>Item Name</th>
+              <th scope='col'>Amount($)</th>
+            </tr>
+          </thead>
+          {this.props.getExpense.map( function(currentexpense) {
+            return(
+              <tbody key={currentexpense.id}>
+                <tr>
+                  <td>{currentexpense.to_char}</td>
+                  <td>{currentexpense.exp_item}</td>
+                  <td>${currentexpense.exp_amt}</td>
+                </tr>
+              </tbody> 
+            )
+          })} 
+        </table>
+
+
+
+
+
+
        </div>   {/*end of display container div*/}      
        <footer className= 'version'>Version 1.0</footer>
       </body>

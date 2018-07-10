@@ -19,7 +19,7 @@ ul {
 	text-align: center;
 }
 
-.list-title {
+/*.list-title {
 	margin: 35px auto;
 	font-size: 20px;
 	text-align: center;
@@ -36,6 +36,10 @@ ul {
 	word-spacing: 270px;
 	color: white;
 	display: inline-block;
+}*/
+
+.table {
+	margin: 10% auto;
 }
 
 .row {

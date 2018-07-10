@@ -121,7 +121,7 @@ const editExpense = (request, response) => {	// render Edit form for Expense bas
 
 	let userId = parseInt(request.cookies['user_id']);
 
-	let queryString = "SELECT id, to_char(exp_date, 'DD-Mon-YYYY'), EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId] + "ORDER BY id ASC;";
+	let queryString = "SELECT id, to_char(exp_date, 'DD-Mon-YYYY'), EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId] + "ORDER BY exp_date ASC;";
 
 	let values = [userId];
 
