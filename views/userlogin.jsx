@@ -10,12 +10,13 @@ class userlogin extends React.Component {
 			 	<h1>SaveLah!</h1>
 			 	<h3>User Login</h3>
 			  	<form method= 'POST' action= '/user/login'>
-			   		<input className= 'username' type= 'text' placeholder= 'Username'/><br/>
-			   		<input className= 'password' type= 'password' placeholder= 'Password'/><br/><br/>
-			   		<input className= 'submit' type= 'submit' value= 'Login'/>
-			   		<input className= 'submit' type= 'submit' value= 'Create User' formAction= '/user/new'/>
+			   		<input name='username' type= 'text' placeholder= 'Username' required /><br/>
+			   		<input name='password' type= 'password' placeholder= 'Password' required /><br/><br/>
+			   		<input className= 'submit' name= 'login' type= 'submit' value= 'Login'/>
+			   		<input className= 'submit' name= 'create' type= 'submit' value= 'Create User' formAction= '/user/new'/>
 			  	</form>
-			 </body>
+			  	<footer className= 'version'>Version 1.0</footer>
+ 			 </body>
 			</div>
 		 </LoginLayout>
 		);

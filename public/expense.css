@@ -4,4 +4,116 @@ body {
 
 h1 {
 	color: rgb(249, 177, 19);
+	text-align: center;
+	margin-top: 2%;
+}
+
+a {
+	text-decoration: none;
+	text-align: center;
+	color: white;
+}
+
+ul {
+	list-style-type: none;
+	text-align: center;
+}
+
+.list-title {
+	margin: 35px auto;
+	font-size: 20px;
+	text-align: center;
+	word-spacing: 300px;
+	color: rgb(249, 177, 19);
+	display: inline-block;	
+}
+
+
+.list-container {
+	margin-top: 20px auto;
+	font-size: 20px;
+	text-align: center;
+	word-spacing: 270px;
+	color: white;
+	display: inline-block;
+}
+
+.row {
+	text-align: center;
+	margin-top: 50px;
+
+}
+
+.listContainer {
+	text-align: center;
+	color: white;
+}
+
+.delete-btn {
+	border-radius: 3px;
+	background-color: rgb(11, 163, 239);
+	color: white;
+	border-width: 0px;
+	font-size: 15px;
+	text-align: center;
+	width: 100px;
+	height: 35px;
+}
+
+.display-container {
+	text-align: center;
+}
+
+.expense-attribute {
+	color: white;
+}
+
+input[type=text] {
+	background-color: rgb(60, 188, 141);
+	color: white;
+	border-radius: 3px;
+	border-color: rgb(60, 188, 141);
+}
+
+input[type=number] {
+	background-color: rgb(60, 188, 141);
+	color: white;
+	border-radius: 3px;
+	border-color: rgb(60, 188, 141);
+}
+
+.expense-form {
+	color: white;
+	word-spacing: 5px;
+}
+
+.submit-1 {
+	border-radius: 3px;
+	background-color: rgb(11, 163, 239);
+	color: white;
+	border-width: 0px;
+	font-size: 15px;
+	text-align: center;
+	width: 100px;
+	height: 35px;
+	margin-right: 80px;	
+}
+
+.submit-2 {
+	border-radius: 3px;
+	background-color: rgb(11, 163, 239);
+	color: white;
+	border-width: 0px;
+	font-size: 15px;
+	text-align: center;
+	width: 100px;
+	height: 35px;
+	margin-left: 80px;	
+}
+
+.version {
+	color: rgb(249, 177, 19);
+	margin-top: 350px;
+	margin-right: 20px;
+	text-align: right;
 }

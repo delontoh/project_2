@@ -83,6 +83,7 @@ class calendarlist extends React.Component {
                 </div>
               </div>
             </div>
+            <footer className= 'version'>Version 1.0</footer>
           </body>
         </div>
       </CalendarLayout>

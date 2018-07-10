@@ -52,129 +52,133 @@ app.engine('jsx', reactEngine);
  */
 
 const dateObj = {
-	1: "'2018-01-01' AND '2018-01-31';",
-	2: "'2018-02-01' AND '2018-02-28';",
-	3: "'2018-03-01' AND '2018-03-31';",
-	4: "'2018-04-01' AND '2018-04-30';",
-	5: "'2018-05-01' AND '2018-05-31';",
-	6: "'2018-06-01' AND '2018-06-30';",
-	7: "'2018-07-01' AND '2018-07-31';",
-	8: "'2018-08-01' AND '2018-08-31';",
-	9: "'2018-09-01' AND '2018-09-30';",
-	10: "'2018-10-01' AND '2018-10-31';",
-	11: "'2018-11-01' AND '2018-11-30';",
-	12: "'2018-12-01' AND '2018-12-30';"
+	1: "'2018-01-01' AND '2018-01-31'",
+	2: "'2018-02-01' AND '2018-02-28'",
+	3: "'2018-03-01' AND '2018-03-31'",
+	4: "'2018-04-01' AND '2018-04-30'",
+	5: "'2018-05-01' AND '2018-05-31'",
+	6: "'2018-06-01' AND '2018-06-30'",
+	7: "'2018-07-01' AND '2018-07-31'",
+	8: "'2018-08-01' AND '2018-08-31'",
+	9: "'2018-09-01' AND '2018-09-30'",
+	10: "'2018-10-01' AND '2018-10-31'",
+	11: "'2018-11-01' AND '2018-11-30'",
+	12: "'2018-12-01' AND '2018-12-30'"
 };
 
 /**
  * === Expense Handlers === *
  */
 
-// const getExpense = (request, response) => {
+const getExpense = (request, response) => {
 
-// 	let monthId = parseInt(request.params['month']);
+	let monthId = parseInt(request.params['month']);
 
-// 	let userId = parseInt(request.cookies['user_id']);
+	let userId = parseInt(request.cookies['user_id']);
 
-// 	let queryString = "SELECT exp_date, EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId]; 
+	let queryString = "SELECT id, to_char(exp_date, 'DD-Mon-YYYY'), EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId] + ";";
 
-// 	let values = [userId];
+	let values = [userId];
 
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			console.error('Query error: ', err.message);
-// 			response.sendStatus(500);
-// 		}
-// 		else {
-// 			response.render('./expenselist', {getExpense: result.rows}); // render with Expense view
-// 		};
-// 	});
-// };
+	pool.query(queryString, values, (err, result) => {
+		if(err) {
+			console.error('Query error getExpense: ', err.message);
+			response.sendStatus(500);
+		}
+		else {
+			response.render('./expenselist', {getExpense: result.rows}); // render with Expense view
+		};
+	});
+};
 
 
-// const newExpense = (request, response) => {
-// 	response.render('./newexpense');
-// }
+const newExpense = (request, response) => {
+	response.render('./newexpense');
+};
 
-// const postExpense = (request, response) => {
-// 	let body = request.body;
+const postExpense = (request, response) => {
+	let body = request.body;
 
-// 	let userId = parseInt(request.cookies['user_id']);
+	let userId = parseInt(request.cookies['user_id']);
 
-// 	let queryString = 'INSERT INTO expense (exp_item, exp_amt, user_id) VALUES ($1, $2, $3);';
+	let queryString = 'INSERT INTO expense (exp_item, exp_amt, user_id) VALUES ($1, $2, $3);';
 
-// 	let values = [body['exp_item'], body['exp_amt'], userId];
+	let values = [body['exp_item'], body['exp_amt'], userId];
 
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			console.error('Query error: ', err.message);
-// 			response.sendStatus(500);
-// 		}
-// 		else {
-// 			response.redirect('/calendar');		// redirect to calendar page.
-// 		};
-// 	});
-// };
+	pool.query(queryString, values, (err, result) => {
+		if(err) {
+			console.error('Query error postExpense: ', err.message);
+			response.sendStatus(500);
+		}
+		else {
+			response.redirect('/calendar');		// redirect to calendar page.
+		};
+	});
+};
 
-// const editExpense = (request, response) => {	// render Edit form for Expense base on date and userId 
-// 	let monthId = parseInt(request.params['month']);
+const editExpense = (request, response) => {	// render Edit form for Expense base on date and userId 
+	let monthId = parseInt(request.params['month']);
 
-// 	let userId = parseInt(request.cookies['user_id']);
+	let userId = parseInt(request.cookies['user_id']);
 
-// 	let queryString = "SELECT exp_date, EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId];
+	let queryString = "SELECT id, to_char(exp_date, 'DD-Mon-YYYY'), EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId] + "ORDER BY id ASC;";
 
-// 	let values = [userId];
+	let values = [userId];
 
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			console.error('Query error: ', err.message);
-// 			response.sendStatus(500);
-// 		}
-// 		else {
-// 			response.render('./editexpense', {editExpense: result.rows});	
-// 		};
-// 	});
-// };
+	pool.query(queryString, values, (err, result) => {
+		if(err) {
+			console.error('Query error editExpense: ', err.message);
+			response.sendStatus(500);
+		}
+		else {
+			response.render('./editexpense', {editExpense: result.rows});	
+		};
+	});
+};
 
-// const putExpense = (request, response) => {	
-// 	let body = request.body;
+const putExpense = (request, response) => {	
+	let body = request.body;
 
-// 	let userId = parseInt(request.cookies['user_id']);
+	let userId = parseInt(request.cookies['user_id']);
 
-// 	let queryString = 'UPDATE expense SET exp_date = $1, exp_item = $2, exp_amt = $3 WHERE user_id = $4;';
+	// let convertDate = new Date('12-45-122');
 
-// 	let values = [body['exp_amt'], body['exp_item'], body['exp_amt'], userId];
+	let queryString = "UPDATE expense SET exp_date = $1, exp_item = $2, exp_amt = $3 WHERE user_id = $4 AND id= $5;";
 
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			console.error('Query error: ', err.message);
-// 			response.sendStatus(500);
-// 		}
-// 		else {
-// 			response.redirect('/calendar');	// redirect to calendar page
-// 		};
-// 	});
-// };
+	let values = [body['exp_date'], body['exp_item'], body['exp_amt'], userId, body['id']];
 
-// const deleteExpense = (request, response) => {
-// 	let month = request.params['month']; 
+	pool.query(queryString, values, (err, result) => {
+		if(err) {
+			console.error('Query error putExpense: ', err.message);
+			response.sendStatus(500);
+		}
+		else {
+			response.redirect('/calendar');	// redirect to calendar page
+		};
+	});
+};
 
-// 	let userId = parseInt(request.cookies['user_id']);
+const deleteExpense = (request, response) => {
+	let body = request.body;
 
-// 	let queryString = 'DELETE * FROM expense WHERE user_id = $1 AND exp_date BETWEEN ' + dateObj['month'];
+	let monthId = request.params['month']; 
 
-// 	let values = [userId];
+	let userId = parseInt(request.cookies['user_id']);
 
-// 	pool.query(queryString, values, (err, result) => {
-// 		if(err) {
-// 			console.error('Query error: ', err.message);
-// 			response.sendStatus(500);
-// 		}
-// 		else {
-// 			response.redirect('/calendar'); // redirect to calendar page
-// 		};
-// 	});
-// };
+	let queryString = "DELETE FROM expense WHERE user_id = $1 AND id = $2 AND exp_date BETWEEN " + dateObj[monthId] + ";";
+
+	let values = [userId, body['id']];
+
+	pool.query(queryString, values, (err, result) => {
+		if(err) {
+			console.error('Query error deleteExpense: ', err.message);
+			response.sendStatus(500);
+		}
+		else {
+			response.redirect('/calendar'); // redirect to calendar page
+		};
+	});
+};
 
 
 /**
@@ -202,7 +206,7 @@ const createUser = (request, response) => {
 
 			response.cookie('logged_in', currentSessionCookie);
 			response.cookie('user_id', userId);
-			response.redirect('/calendar');
+			response.redirect('/user/expense/new');
 		};
 	});
 };
@@ -215,7 +219,7 @@ const verifyUser = (request, response) => {
 
 	pool.query(queryString, values, (err, result) => {
 		if(err) {
-			response.send('Query error: ' + err.message);
+			response.send('Query error: ' + err.message);	// error if query fail
 		}
 		else {
 			const queryResult = result.rows;
@@ -241,6 +245,7 @@ const verifyUser = (request, response) => {
 					response.send('Wrong Password!');
 				};
 			};
+			console.log(queryResult);
 		};
 	});
 };
@@ -249,7 +254,7 @@ const verifyUser = (request, response) => {
 const logoutPage = (request, response) => {
 	response.clearCookie('user_id');
 	response.clearCookie('logged_in');
-	response.send('You are safely logged out');
+	response.redirect('/');	// redirects to login page
 };
 
 // * Calendar page handler
@@ -266,29 +271,25 @@ const getCalendar = (request, response) => {
  */
 
 // ** Expense routes **
+// order of routes matter => if not route matching error occurs
+app.get('/user/expense/new', newExpense);
+app.post('/user/expense/post', postExpense);
 
-// app.get('/user/totalexpense/:month', getExpenseTotal);
+app.get('/user/expense/:month', getExpense);
 
-// app.get('/user/expense/:month', getExpense);
+app.get('/user/expense/:month/edit', editExpense);
+app.put('/user/expense/:month/put', putExpense);
 
-// app.get('/user/expense/:month/new', newExpense);
-// app.post('/user/expense/post', postExpense);
+app.delete('/user/expense/:month/delete', deleteExpense);
 
-// app.get('/user/expense/:month/edit', editExpense);
-// app.post('/user/expense/put', putExpense);
-
-// app.delete('/user/expense/delete', deleteExpense);
 
 
 // ** User routes **
 
 app.get('/', loginPage);
-
 app.post('/user/login', verifyUser);
 app.post('/user/new', createUser);
-
 app.delete('/user/logout', logoutPage);
-
 
 // * Calendar route **
 

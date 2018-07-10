@@ -1,45 +1,60 @@
 var React = require("react");
-var ExpenseLayout = require('./layouts/ExpenseLayout');
+var ExpenseLayout = require('./expenseLayout');
 
 class ListDetails extends React.Component {
   render() {
-    return (
-      <div className= 'expenseListContainer'>
-        <p className="expense-attribute">Date: {this.props.getExpense.exp_date}</p>
-        <p className="expense-attribute">Item name: {this.props.getExpense.exp_item}</p>
-        <p className="expense-attribute">Amount: $ {this.props.getExpense.exp_amt}</p>
-      </div>
-    );
-  }
-}
 
-class expenselist extends React.Component {
-  render() {
-    const listDetailsComponent = this.props.getExpense.map(currentexpense => {
-      return <ListDetails key={currentexpense.id} />
-    });
+    var datePart = this.props.getExpense[0].date_part;
+    var str = datePart.toString();  // convert date_part to string to pass through form action
+    var toEditPage = '/user/expense/' + str + '/edit';
 
     return (
-      <ExpenseLayout>
-       <h1>Month: {this.props.getExpense.date_part}</h1>
-       <div className= 'headerDiv'>
-        <form className= 'newexpense' method= 'GET' action= '/user/expense/:month/new'>
-          <input name= 'create' type= 'submit' value='New'/>
-        </form>
-        <form className= 'editexpense' method= 'GET' action= '/user/expense/:month/edit'>
-          <input className= 'edit' type='submit' value= 'Edit'/>
-        </form>
-        <form className= 'deleteall' method= 'GET' action= '/user/expense/:month/delete'>
-          <input className= 'delete' type='submit' value= 'Delete'/>
-        </form>
-       </div>
+     <ExpenseLayout>
+      <body>
+       <div className= 'display container'>
 
-       <div className='expenseContainer'>
-        {listDetailsComponent}
-       </div>
-      </ExpenseLayout>
+        <h1>Expense for Month: {this.props.getExpense[0].date_part}</h1>
+
+        <div className= 'row'>
+         <div className= 'col-4'>
+          <button type= 'button' className= 'btn btn-success btn-circle btn-lg'><a href='/user/expense/new'>+</a></button>
+         </div>
+         <div className= 'col-4'>   
+          <button type= 'button' className= 'btn btn-danger btn-circle btn-md'><a href= {toEditPage}>Edit/Delete</a></button>
+         </div>
+         <div className= 'col-4'> 
+          <form name= 'logout' className= 'logout-form' method='POST' action= {'/user/logout?_method=DELETE'}>
+            <input type= 'submit' name= 'submit' className= 'delete-btn' value= 'Logout'/>
+          </form>
+         </div>
+        </div>
+
+        <ul>
+          <li className= 'list-title'>
+            |Date|
+            |Item|
+            |Amount|
+          </li>
+        </ul>
+
+        <ul>
+          {this.props.getExpense.map( function(currentexpense) {
+            return (
+                <li className= 'list-container' key={currentexpense.id}>
+                  {currentexpense.to_char}|
+                  |{currentexpense.exp_item}|
+                  ${currentexpense.exp_amt}
+                </li>
+              )
+          })}
+        </ul> 
+       </div>   {/*end of display container div*/}      
+       <footer className= 'version'>Version 1.0</footer>
+      </body>
+     </ExpenseLayout>
     )
-  }
-}
+  };
+};
 
-module.exports = expenselist;
+
+module.exports = ListDetails;

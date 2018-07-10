@@ -29,3 +29,10 @@ input {
 	border-color: white;
 	border-width: 3px;
 }
+
+.version {
+	color: rgb(249, 177, 19);
+	margin-top: 260px;
+	margin-right: 20px;
+	text-align: right;
+}

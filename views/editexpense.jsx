@@ -1,27 +1,38 @@
 var React = require("react");
-var ExpenseLayout = require('./layouts/ExpenseLayout');
+var ExpenseLayout = require('./ExpenseLayout');
 
 class editexpense extends React.Component {
   render() {
+
+    var datePart= this.props.editExpense[0].date_part;
+    var str= datePart.toString();
+
+    var formPathEdit= "/user/expense/" + str + "/put?_method=PUT";
+    var formPathDelete = "/user/expense/" + str + "/delete?_method=DELETE";
+
     return (
       <ExpenseLayout>
-        <div className= 'editExpenseContainer'>
-          <h1>Edit Expense</h1><br/><br/>
-          <form className="expense-form" method="POST" action={"/user/expense/put?_method=PUT"}>
-             <div className="expense-attribute">
-              Date: <input name="exp_item" type="text" defaultValue={this.props.editExpense.exp_date} />
-            </div>
-            <div className="expense-attribute">
-              Item name: <input name="exp_item" type="text" defaultValue={this.props.editExpense.exp_item} />
-            </div>
-            <div className="expense-attribute">
-              Amount: $ <input name="exp_amt" type="number" defaultValue={this.props.editExpense.exp_amt} />
-            </div>
 
-            <input name="edit" type="submit" value= 'Save' />
-            <input name="delete" type="submit" value='Delete' formAction={"user/expense/delete?_method=DELETE"} />
-          </form>
+        <div className= 'display-container'>
+          <h1>Edit Expense</h1><br/><br/>
+
+          {this.props.editExpense.map(function(currentexpense) {
+            return(
+              <div className= 'form-container' key= {currentexpense.id}>
+                <form className="expense-form" name="editexpense" method="POST" action= {formPathEdit}>
+                  <input name='id' type='hidden' defaultValue={currentexpense.id} />
+                  Date: <input name="exp_date" type="text" defaultValue={currentexpense.to_char} required/>
+                  Item name: <input name="exp_item" type="text" defaultValue={currentexpense.exp_item} required/>
+                  Amount: $ <input name="exp_amt" type="text" defaultValue={currentexpense.exp_amt} required/><br/><br/>
+ 
+                  <input className= "submit-1" name="edit" type="submit" value='Save' />
+                  <input className= "submit-2" name="delete" type="submit" value='Delete' formAction={formPathDelete} />
+                </form><br/>
+              </div>
+            )
+          })}
         </div>
+
       </ExpenseLayout>
     );
   }
