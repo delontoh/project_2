@@ -76,7 +76,7 @@ const getExpense = (request, response) => {
 
 	let userId = parseInt(request.cookies['user_id']);
 
-	let queryString = "SELECT id, to_char(exp_date, 'DD-Mon-YYYY'), EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId] + ";";
+	let queryString = "SELECT id, to_char(exp_date, 'DD-Mon-YYYY'), EXTRACT(month FROM exp_date), exp_item, exp_amt FROM expense WHERE user_id = $1 AND exp_date BETWEEN " + dateObj[monthId] + "ORDER BY exp_date ASC;";
 
 	let values = [userId];
 
@@ -85,8 +85,16 @@ const getExpense = (request, response) => {
 			console.error('Query error getExpense: ', err.message);
 			response.sendStatus(500);
 		}
+
 		else {
-			response.render('./expenselist', {getExpense: result.rows}); // render with Expense view
+			let resultRows = result.rows;
+
+			if(resultRows.length < 1) {
+				response.redirect('/user/expense/new');
+			}
+			else {
+				response.render('./expenselist', {getExpense: result.rows}); // render with Expense view
+			}
 		};
 	});
 };

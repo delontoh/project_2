@@ -16,7 +16,8 @@ class newexpense extends React.Component {
             <div className="expense-attribute">
               Amount : $ <input name="exp_amt" type="text" required/>
             </div><br/>
-            <input name= "submit" type="submit" value="Create" />
+            <input className= "btn btn-primary" name= "submit" type="submit" value="Create" />
+          <a className="btn btn-danger" href= 'javascript:history.go(-1)'>&laquo; Back</a>
           </form>
         </div>
        </div>

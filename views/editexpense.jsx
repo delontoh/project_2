@@ -13,11 +13,20 @@ class editexpense extends React.Component {
     return (
       <ExpenseLayout>
 
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div className = 'container'>
+            <a className="navbar-brand" href="/calendar">SaveLah!</a>
+            <li className="nav-item">
+              <a className="btn btn-danger" href= 'javascript:history.go(-1)'>&laquo; Back</a>
+            </li>
+          </div>
+        </nav>           
+
         <div className= 'display-container'>
           <h1>Edit Expense</h1><br/><br/>
 
           {this.props.editExpense.map(function(currentexpense) {
-            return(
+            return(             
               <div className= 'form-container' key= {currentexpense.id}>
                 <form className="expense-form" name="editexpense" method="POST" action= {formPathEdit}>
                   <input name='id' type='hidden' defaultValue={currentexpense.id} />
@@ -32,7 +41,6 @@ class editexpense extends React.Component {
             )
           })}
         </div>
-
       </ExpenseLayout>
     );
   }

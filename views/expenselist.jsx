@@ -11,44 +11,31 @@ class ListDetails extends React.Component {
     return (
      <ExpenseLayout>
       <body>
+
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+         <div className = 'container'>
+            <a className="navbar-brand" href="/calendar">SaveLah!</a>
+            <ul className="navbar-nav">
+              <li className="nav-item active">
+                <a className="nav-link" href="/calendar">Calendar<span className="sr-only">(current)</span></a>
+              </li>
+              <li className="nav-item">
+                <a className='nav-link' href='/user/expense/new'>+New</a>
+              </li>
+              <li className="nav-item">
+                <a className='nav-link' href= {toEditPage}>Edit/Delete</a>
+              </li>
+              <li className="nav-item">
+                <form name= 'logout' className= 'logout-form nav-link nav-item' method='POST' action= {'/user/logout?_method=DELETE'}>
+                    <input type= 'submit' name= 'submit' className= 'logout-btn' value= 'Logout'/>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </nav>        
+       
        <div className= 'display container'>
-
-        <h1>Expense for Month: {this.props.getExpense[0].date_part}</h1>
-
-        <div className= 'row'>
-         <div className= 'col-4'>
-          <button type= 'button' className= 'btn btn-success btn-circle btn-lg'><a href='/user/expense/new'>+</a></button>
-         </div>
-         <div className= 'col-4'>   
-          <button type= 'button' className= 'btn btn-danger btn-circle btn-md'><a href= {toEditPage}>Edit/Delete</a></button>
-         </div>
-         <div className= 'col-4'> 
-          <form name= 'logout' className= 'logout-form' method='POST' action= {'/user/logout?_method=DELETE'}>
-            <input type= 'submit' name= 'submit' className= 'delete-btn' value= 'Logout'/>
-          </form>
-         </div>
-        </div>
-
-{/*        <ul>
-          <li className= 'list-title'>
-            |Date|
-            |Item|
-            |Amount|
-          </li>
-        </ul>*/}
-{/*
-        <ul>
-          {this.props.getExpense.map( function(currentexpense) {
-            return (
-                <li className= 'list-container' key={currentexpense.id}>
-                  {currentexpense.to_char}|
-                  |{currentexpense.exp_item}|
-                  ${currentexpense.exp_amt}
-                </li>
-              )
-          })}
-        </ul>*/} 
-
+       <h1>Expense for Month: {this.props.getExpense[0].date_part}</h1>
         <table className= 'table table-hover table-striped table-dark'>
           <thead>
             <tr>
@@ -60,22 +47,17 @@ class ListDetails extends React.Component {
           {this.props.getExpense.map( function(currentexpense) {
             return(
               <tbody key={currentexpense.id}>
-                <tr>
-                  <td>{currentexpense.to_char}</td>
-                  <td>{currentexpense.exp_item}</td>
-                  <td>${currentexpense.exp_amt}</td>
+                <tr key={currentexpense.id}>
+                  <td className= 'output'>{currentexpense.to_char}</td>
+                  <td className= 'output'>{currentexpense.exp_item}</td>
+                  <td className= 'output'>${currentexpense.exp_amt}</td>
                 </tr>
               </tbody> 
             )
           })} 
         </table>
+       </div>   {/*end of display container div*/}  
 
-
-
-
-
-
-       </div>   {/*end of display container div*/}      
        <footer className= 'version'>Version 1.0</footer>
       </body>
      </ExpenseLayout>
