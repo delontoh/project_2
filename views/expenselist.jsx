@@ -60,6 +60,7 @@ class ListDetails extends React.Component {
 
        <footer className= 'version'>Version 1.0</footer>
       </body>
+      <script src='/ajax.js'></script>
      </ExpenseLayout>
     )
   };
